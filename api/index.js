@@ -47,7 +47,16 @@ function modifyFeedTitles(feed) {
     copyright: feed.copyright,
     language: feed.language,
     pubDate: feed.pubDate,
-    image: feed.image,
+    image_url: feed.image?.url,
+    ttl: 60,
+    custom_namespaces: {
+      atom: "http://www.w3.org/2005/Atom",
+      content: "http://purl.org/rss/1.0/modules/content/",
+      googleplay: "http://www.google.com/schemas/play-podcasts/1.0",
+      itunes: "http://www.itunes.com/dtds/podcast-1.0.dtd",
+      media: "http://search.yahoo.com/mrss/",
+      podcast: "https://podcastindex.org/namespace/1.0",
+    },
   })
 
   feed.items.forEach((item) => {
@@ -87,11 +96,20 @@ function modifyFeedTitles(feed) {
       url: item.link,
       guid: item.guid,
       date: item.pubDate,
-      enclosure: item.enclosure ? item.enclosure : undefined,
-      itunes_duration: item.itunes?.duration,
-      itunes_explicit: item.itunes?.explicit,
-      itunes_episodeType: item.itunes?.episodeType,
-      itunes_episode: item.itunes?.episode,
+      enclosure: item.enclosure
+        ? {
+            url: item.enclosure.url,
+            type: item.enclosure.type,
+            size: item.enclosure.length,
+          }
+        : undefined,
+      custom_elements: [
+        { "itunes:image": item.itunes?.image },
+        { "itunes:duration": item.itunes?.duration },
+        { "itunes:explicit": item.itunes?.explicit },
+        { "itunes:episodeType": item.itunes?.episodeType },
+        { "itunes:episode": item.itunes?.episode },
+      ],
     })
   })
 
