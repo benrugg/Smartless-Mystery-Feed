@@ -39,6 +39,10 @@ async function fetchPodcastFeed(url) {
 
 // Function to modify the feed titles
 function modifyFeedTitles(feed) {
+  let keywords = feed.itunes?.keywords || []
+  if (!Array.isArray(keywords)) keywords = [keywords]
+  keywords = keywords.join(", ")
+
   const modifiedFeed = new RSS({
     title: feed.title,
     description: feed.description,
@@ -57,6 +61,21 @@ function modifyFeedTitles(feed) {
       media: "http://search.yahoo.com/mrss/",
       podcast: "https://podcastindex.org/namespace/1.0",
     },
+    custom_elements: [
+      {
+        "itunes:image": {
+          _attr: {
+            href: feed.image?.url,
+          },
+        },
+      },
+      { "itunes:explicit": feed.itunes?.explicit },
+      { "itunes:keywords": keywords },
+      { "itunes:owner": [{ "itunes:name": feed.itunes?.owner?.name }] },
+      { "itunes:author": feed.itunes?.author },
+      { "itunes:type": feed.itunes?.type },
+      { "itunes:summary": feed.itunes?.summary },
+    ],
   })
 
   feed.items.forEach((item) => {
