@@ -61,8 +61,8 @@ function modifyFeedTitles(feed) {
 
   feed.items.forEach((item) => {
     // Extract the original title, and trim quotes
-    const originalTitle = item.title.replace(/^"|"$/g, "")
-    const formattedDate = moment(item.pubDate).format("MMMM Do, YYYY")
+    const originalTitle = item.title.replace(/^["“]|["”]$/g, "")
+    const formattedDate = moment(item.pubDate).format("MMM D, YYYY")
     let newTitle
 
     // Prepare regex patterns
@@ -72,19 +72,19 @@ function modifyFeedTitles(feed) {
     if (livePattern.test(originalTitle)) {
       const match = originalTitle.match(livePattern)
       const location = match[2]
-      newTitle = `Mystery Guest LIVE in ${location} on ${formattedDate}`
+      newTitle = `Mystery Guest LIVE in ${location} / ${formattedDate}`
     }
     // Rule 2: If title has two words, "&", and two more words (e.g., "Will Arnett & Jason Bateman")
     else if (isTwoGuestsTitle(originalTitle)) {
-      newTitle = `TWO Mystery Guests on ${formattedDate}`
+      newTitle = `Two Mystery Guests / ${formattedDate}`
     }
     // Rule 3: If title has 1-3 words, format like "Mystery Guest on [date]"
     else if (isOneToThreeWordsTitle(originalTitle)) {
-      newTitle = `Mystery Guest on ${formattedDate}`
+      newTitle = `Mystery Guest / ${formattedDate}`
     }
     // Rule 4: Default to "Something Special on [date]"
     else {
-      newTitle = `Something Special on ${formattedDate}`
+      newTitle = `Something Special / ${formattedDate}`
     }
 
     // Prepend the description text and add two line breaks
