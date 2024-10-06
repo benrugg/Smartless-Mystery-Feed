@@ -47,6 +47,7 @@ function modifyFeedTitles(feed) {
     copyright: feed.copyright,
     language: feed.language,
     pubDate: feed.pubDate,
+    image: feed.image,
   })
 
   feed.items.forEach((item) => {
