@@ -10,7 +10,7 @@ const port = process.env.PORT || 3000
 const SMARTLESS_RSS_URL = "https://feeds.simplecast.com/hNaFxXpO"
 
 // Endpoint to return the modified RSS feed
-app.get("/rss", async (req, res) => {
+app.get("/", async (req, res) => {
   try {
     // Step 1: Fetch the original RSS feed
     const originalFeed = await fetchPodcastFeed(SMARTLESS_RSS_URL)
