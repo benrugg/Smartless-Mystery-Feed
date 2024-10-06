@@ -95,7 +95,7 @@ function modifyFeedTitles(feed) {
     }
     // Rule 2: If title has two words, "&", and two more words (e.g., "Will Arnett & Jason Bateman")
     else if (isTwoGuestsTitle(originalTitle)) {
-      newTitle = `Two Mystery Guests / ${formattedDate}`
+      newTitle = `TWO Mystery Guests / ${formattedDate}`
     }
     // Rule 3: If title has 1-3 words, format like "Mystery Guest on [date]"
     else if (isOneToThreeWordsTitle(originalTitle)) {
