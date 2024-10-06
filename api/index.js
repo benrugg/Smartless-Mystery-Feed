@@ -8,6 +8,7 @@ const app = express()
 const port = process.env.PORT || 3000
 
 const SMARTLESS_RSS_URL = "https://feeds.simplecast.com/hNaFxXpO"
+const MODIFIED_URL = "https://smartless-mystery-feed.vercel.app/"
 
 // Endpoint to return the modified RSS feed
 app.get("/", async (req, res) => {
@@ -19,7 +20,8 @@ app.get("/", async (req, res) => {
     const modifiedFeed = modifyFeedTitles(originalFeed)
 
     // Step 3: Send the new RSS feed as the response with the correct content type
-    res.set("Content-Type", "application/rss+xml")
+    res.set("Cache-Control", "max-age=3600")
+    res.set("Content-Type", "application/xml")
     res.send(modifiedFeed)
   } catch (error) {
     console.error("Error fetching or generating the RSS feed:", error)
@@ -40,8 +42,11 @@ function modifyFeedTitles(feed) {
   const modifiedFeed = new RSS({
     title: feed.title,
     description: feed.description,
-    feed_url: SMARTLESS_RSS_URL,
-    site_url: feed.link,
+    feed_url: MODIFIED_URL,
+    site_url: MODIFIED_URL,
+    copyright: feed.copyright,
+    language: feed.language,
+    pubDate: feed.pubDate,
   })
 
   feed.items.forEach((item) => {
@@ -81,6 +86,11 @@ function modifyFeedTitles(feed) {
       url: item.link,
       guid: item.guid,
       date: item.pubDate,
+      enclosure: item.enclosure ? item.enclosure : undefined,
+      itunes_duration: item.itunes?.duration,
+      itunes_explicit: item.itunes?.explicit,
+      itunes_episodeType: item.itunes?.episodeType,
+      itunes_episode: item.itunes?.episode,
     })
   })
 
